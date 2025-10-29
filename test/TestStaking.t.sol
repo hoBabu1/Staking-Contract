@@ -61,10 +61,9 @@ contract TestStaking is Test {
         assertEq(isRegistered, true);
 
         vm.warp(block.timestamp + 86400);
-    /**
-     * Staking again and checking correct updation of reward and a vairable
-     */
-
+        /**
+         * Staking again and checking correct updation of reward and a vairable
+         */
 
         vm.startPrank(owner);
         mockToken.transfer(user, initalAmount);
@@ -90,7 +89,28 @@ contract TestStaking is Test {
         assertEq(_lastUpdatedAt, block.timestamp);
         assertEq(_lastClaimtime, block.timestamp - 86400);
         assertEq(_rewardDebt, 1e18);
-    }
 
-    // User 2 Will stake with a refferal of User1
+        // User 2 Will stake with a refferal of User1
+
+        vm.startPrank(owner);
+        mockToken.transfer(user2, initalAmount);
+        vm.stopPrank();
+
+        vm.startPrank(user2);
+        mockToken.approve(address(staking), initalAmount);
+        staking.stake(initalAmount, user);
+        vm.stopPrank();
+
+        (, uint256 _totalReferal, uint256 _totalReferalReward, , , , , ) = staking
+            .userInfo(user);
+
+      /**
+       * 0.5% of 100e18 = 5e17
+       */
+        assertEq(_totalReferal, 1);
+        assertEq(_totalReferalReward, 5e17);
+        assertEq(mockToken.balanceOf(user),5e17);
+
+
+    }
 }
