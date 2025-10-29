@@ -24,8 +24,10 @@ contract Staking {
     error Staking__RefereeNotRegisterdUser();
     event Staking__ReferralRewardPaid();
     error Staking__ClaimAllowedOnlyOnceIn24Hr(uint256 timeLeft);
+    error Staking__IncorrectAmount();
     event Staking__Staked();
     event Staking__ClaimedRoi();
+    event Staking__Unstaked(address user, uint256 unstakedAmount);
 
     uint256 public constant ROI_PERCENT = 100; // 1% = 100 basis points
     uint256 public constant REFERRAL_PERCENT = 50; // 0.5% = 50 basis points
@@ -100,11 +102,10 @@ contract Staking {
         }
         uint256 rewardAmount = calculateReward(msg.sender);
         user.lastClaimtime = block.timestamp;
-        user.rewardDebt = 0 ;
-          
-        stakingToken.safeTransfer(msg.sender, rewardAmount);
-        emit  Staking__ClaimedRoi();
+        user.rewardDebt = 0;
 
+        stakingToken.safeTransfer(msg.sender, rewardAmount);
+        emit Staking__ClaimedRoi();
     }
 
     function calculateReward(
@@ -117,11 +118,20 @@ contract Staking {
             (PERCENT_DIVIDER * claimInterval);
         reward += user.rewardDebt;
     }
+
+    function unStake(uint256 _amount) external {
+        User storage user = userInfo[msg.sender];
+
+        if (_amount > user.totalStakedAmount) {
+            revert Staking__IncorrectAmount();
+        }
+
+        user.rewardDebt = calculateReward(msg.sender);
+        user.lastUpdatedAt = block.timestamp;
+        user.totalStakedAmount -= _amount;
+
+        stakingToken.safeTransfer(address(this), _amount);
+
+        emit Staking__Unstaked(msg.sender, _amount);
+    }
 }
-// block.timestamp -- 100
-/**
- * user deposit at 90
- * claim interval is 10
- * current block.time is 95 ---
- * block.time < userLastCalim + interval
- */
