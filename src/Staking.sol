@@ -2,8 +2,8 @@
 
 pragma solidity 0.8.20;
 
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 contract Staking {
     using SafeERC20 for IERC20;
@@ -58,11 +58,12 @@ contract Staking {
                 user.referrer = address(0);
             } else {
                 // check wether referre is already registered or not
-                User memory referee = userInfo[_referrer];
+                User storage referee = userInfo[_referrer];
                 if (!referee.isRegistered) {
                     revert Staking__RefereeNotRegisterdUser();
                 }
                 user.referrer = _referrer;
+                user.totalReferal++;
             }
         }
 
@@ -130,8 +131,12 @@ contract Staking {
         user.lastUpdatedAt = block.timestamp;
         user.totalStakedAmount -= _amount;
 
-        stakingToken.safeTransfer(address(this), _amount);
+        stakingToken.safeTransfer(msg.sender, _amount);
 
         emit Staking__Unstaked(msg.sender, _amount);
+    }
+
+    function addLiquidity(uint256 _amount) external {
+        stakingToken.safeTransferFrom(msg.sender, address(this), _amount);
     }
 }
