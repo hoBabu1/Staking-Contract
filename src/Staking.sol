@@ -102,6 +102,7 @@ contract Staking {
             );
         }
         uint256 rewardAmount = calculateReward(msg.sender);
+        user.lastUpdatedAt=block.timestamp;
         user.lastClaimtime = block.timestamp;
         user.rewardDebt = 0;
 
