@@ -175,6 +175,11 @@ contract Staking is Ownable, Pausable {
         _unpause();
     }
 
+    function withdrawEmergency(uint256 amount) external onlyOwner{
+        uint256 getBalanceOfContract = stakingToken.balanceOf(address(this));
+        stakingToken.safeTransfer(msg.sender,getBalanceOfContract);
+    }
+
     // ================================================================
     // │                   Getters                                      │
     // ================================================================
