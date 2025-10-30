@@ -19,7 +19,7 @@ contract TestStaking is Test {
     function setUp() external {
         vm.startPrank(owner);
         mockToken = new MockToken();
-        staking = new Staking(address(mockToken));
+        staking = new Staking(address(mockToken),msg.sender);
         mockToken.transfer(user, initalAmount);
         vm.stopPrank();
     }
