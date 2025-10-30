@@ -1,66 +1,18 @@
-## Foundry
+# NAMASTE 🙏
+## Staking Contract 
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+## Addresses 
 
-Foundry consists of:
+- Staking Contract (Verified) -[0x5466734f294518Ca6Ba2230Ab557C9322AaA14f8](https://testnet.bscscan.com/address/0x5466734f294518Ca6Ba2230Ab557C9322AaA14f8)
+- Mock Token (BEP-20) - [0x22DbBb00A1dC0bE2905933CE373400490ec3ddf7](https://testnet.bscscan.com/address/0x22DbBb00A1dC0bE2905933CE373400490ec3ddf7)
 
-- **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
-- **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
-- **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
-- **Chisel**: Fast, utilitarian, and verbose solidity REPL.
 
-## Documentation
+## Core Features
+- Users can stake a chosen BEP-20 token.
+- Users earn 1% ROI per 24h on their staked principal.
+- Referral rewards: 0.5% of the referee’s deposit paid immediately to the referrer.
+- Only one ROI claim allowed every 24h per user.
 
-https://book.getfoundry.sh/
-
-## Usage
-
-### Build
-
-```shell
-$ forge build
-```
-
-### Test
-
-```shell
-$ forge test
-```
-
-### Format
-
-```shell
-$ forge fmt
-```
-
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+## Assumptions 
+- No Lock in period 
+- Reward and Staking token both are same 
